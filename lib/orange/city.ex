@@ -1,7 +1,28 @@
 defmodule Orange.City do
   import Orange.Utils, only: [random_number: 2]
 
-  def register(city_name) do
-    {:ok, random_number(10, 100)}
+  use GenServer
+
+  def start_link() do
+    GenServer.start_link(__MODULE__, [])
   end
+
+  def register(city_reg_pid, city_name) do
+    GenServer.call(city_reg_pid, {:register, city_name})
+  end
+
+  def find(city_reg_pid, prefix) do
+    GenServer.call(city_reg_pid, {:find_by_prefix, prefix})
+  end
+
+  def handle_call({:register, city}, _from, state) do
+    prefix = random_number(10, 100)
+    {:reply, {:ok, prefix}, [{city, prefix} | state]}
+  end
+
+  def handle_call({:find_by_prefix, prefix}, _from, state) do
+    {city, _prefix} = List.keyfind(state, prefix, 1, {:not_registered, 0})
+    {:reply, city, state}
+  end
+
 end
