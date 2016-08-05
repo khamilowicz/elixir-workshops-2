@@ -20,6 +20,8 @@ defmodule Orange.CityTest do
     end
 
     test "City registers new number", %{city_name: city_name, prefix: prefix} do
+      {:ok, number} = City.generate_new_number(city_name)
+      assert String.starts_with?(number, to_string(prefix))
     end
   end
 
