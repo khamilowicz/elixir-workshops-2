@@ -23,6 +23,12 @@ defmodule Orange.CityTest do
       {:ok, number} = City.generate_new_number(city_name)
       assert String.starts_with?(number, to_string(prefix))
     end
+
+    test "City retrieves all numbers from city", %{city_name: city_name} do
+      {:ok, number} = City.generate_new_number(city_name)
+      [prefix, number] = String.split(number, "-")
+      assert String.to_integer(number) in City.numbers_from(city_name)
+    end
   end
 
   def register_city(context) do

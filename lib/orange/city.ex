@@ -16,6 +16,10 @@ defmodule Orange.City do
       end
       new_number
     end
+
+    def get_numbers(city_name) do
+      Agent.get({:global, city_name}, &Map.keys/1)
+    end
   end
 
   def start_link do
@@ -26,12 +30,21 @@ defmodule Orange.City do
     GenServer.call(__MODULE__, {:register, city_name})
   end
 
+  def numbers_from(city_name) do
+    GenServer.call(__MODULE__, {:list_numbers, city_name})
+  end
+
   def find(prefix) do
     GenServer.call(__MODULE__, {:find_by_prefix, prefix})
   end
 
   def generate_new_number(city_name) do
     GenServer.call(__MODULE__, {:generate_new_number, city_name})
+  end
+
+  def handle_call({:list_numbers, city}, _from, state) do
+    numbers =  CityExchange.get_numbers(city)
+    {:reply, numbers, state}
   end
 
   def handle_call({:register, city}, _from, state) do
