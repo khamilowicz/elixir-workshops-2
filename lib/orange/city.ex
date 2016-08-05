@@ -3,16 +3,16 @@ defmodule Orange.City do
 
   use GenServer
 
-  def start_link() do
-    GenServer.start_link(__MODULE__, [])
+  def start_link do
+    GenServer.start_link(__MODULE__, [], name: __MODULE__)
   end
 
-  def register(city_reg_pid, city_name) do
-    GenServer.call(city_reg_pid, {:register, city_name})
+  def register(city_name) do
+    GenServer.call(__MODULE__, {:register, city_name})
   end
 
-  def find(city_reg_pid, prefix) do
-    GenServer.call(city_reg_pid, {:find_by_prefix, prefix})
+  def find(prefix) do
+    GenServer.call(__MODULE__, {:find_by_prefix, prefix})
   end
 
   def handle_call({:register, city}, _from, state) do
