@@ -6,7 +6,15 @@ defmodule Orange.City do
   alias Orange.CityExchange
 
   def start_link do
-    GenServer.start_link(__MODULE__, [], name: __MODULE__)
+    GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
+  end
+
+  def init(_) do
+    init_state =
+      CityExchange.list_exchanges
+      |> Enum.map(&( {&1.city_name, &1.prefix} ))
+
+    {:ok, init_state}
   end
 
   def register(city_name) do
