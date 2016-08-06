@@ -32,7 +32,7 @@ defmodule Orange.City do
 
   def handle_call({:register, city}, _from, state) do
     prefix = random_number(10, 100)
-    {:ok, _city_exchange} = CityExchange.start_link(city)
+    CityExchange.register_new_city(city)
     {:reply, {:ok, prefix}, [{city, prefix} | state]}
   end
 

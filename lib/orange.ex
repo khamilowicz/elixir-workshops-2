@@ -9,6 +9,7 @@ defmodule Orange do
     # Define workers and child supervisors to be supervised
     children = [
       # Starts a worker by calling: Orange.Worker.start_link(arg1, arg2, arg3)
+      supervisor(Orange.CityExchangeSup, []),
       worker(Orange.City, [], restart: :permanent),
     ]
 
