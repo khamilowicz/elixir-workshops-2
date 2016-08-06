@@ -9,7 +9,7 @@ defmodule Orange do
     # Define workers and child supervisors to be supervised
     children = [
       # Starts a worker by calling: Orange.Worker.start_link(arg1, arg2, arg3)
-      # worker(Orange.Worker, [arg1, arg2, arg3]),
+      worker(Orange.City, [], restart: :permanent),
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
