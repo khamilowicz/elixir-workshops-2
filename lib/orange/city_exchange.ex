@@ -8,6 +8,9 @@ defmodule Orange.CityExchange do
       __MODULE__.get_meta(pid)
     end)
   end
+  def list_exchanges(from) do
+    send from, list_exchanges
+  end
 
   def register_new_city(city_name, prefix) do
     Supervisor.start_child(Orange.CityExchangeSup, [city_name, prefix])

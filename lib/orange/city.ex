@@ -11,7 +11,13 @@ defmodule Orange.City do
 
   def init(_) do
     init_state =
-      CityExchange.list_exchanges
+      Node.list
+      |> Enum.flat_map(fn(node_name) -> 
+        Node.spawn(node_name, CityExchange, :list_exchanges, [self])
+        receive do
+          list -> list
+        end
+      end)
       |> Enum.map(&( {&1.city_name, &1.prefix} ))
 
     {:ok, init_state}
