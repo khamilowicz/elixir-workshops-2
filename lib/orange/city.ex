@@ -1,26 +1,9 @@
 defmodule Orange.City do
-  import Orange.Utils, only: [random_number: 2]
-
   use GenServer
 
-  defmodule CityExchange do
+  import Orange.Utils, only: [random_number: 2]
 
-    def start_link(city_name) do
-      Agent.start_link(fn -> %{} end, name: {:global, city_name})
-    end
-
-    def register_number(city_name) do
-      new_number = random_number(1000, 10000)
-      Agent.update {:global, city_name}, fn(numbers) ->
-        Map.put(numbers, new_number, nil)
-      end
-      new_number
-    end
-
-    def get_numbers(city_name) do
-      Agent.get({:global, city_name}, &Map.keys/1)
-    end
-  end
+  alias Orange.CityExchange
 
   def start_link do
     GenServer.start_link(__MODULE__, [], name: __MODULE__)
@@ -69,5 +52,10 @@ defmodule Orange.City do
   end
   defp find_by_city_name(city, state) do
     List.keyfind(state, city, 0, {:not_registered, 0})
+  end
+
+  def terminate(error, state) do
+    IO.inspect(error)
+    :ok
   end
 end
